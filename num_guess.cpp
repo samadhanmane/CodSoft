@@ -12,7 +12,7 @@ int main()
 {
     srand(time(0)); 
     int num;
-    int t = 0;
+    int trial = 0;
     int number_range = rand();
     cout<<"I have selected a number."<<endl;
     
@@ -25,7 +25,7 @@ int main()
             cout << "Invalid input. Please enter a number." << endl;
             continue; 
         }
-        t++;
+        trial++;
     
         if(num < number_range){
             cout<<"Too Low! "<<endl;
