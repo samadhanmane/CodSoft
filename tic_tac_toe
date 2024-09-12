@@ -1,0 +1,105 @@
+#include <iostream>
+using namespace std;
+
+void initializeGrid(char grid[3][3]) {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            grid[i][j] = ' ';
+        }
+    }
+}
+
+void displayGrid(const char grid[3][3]) {
+    cout << "Current Board:\n";
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            cout << grid[i][j];
+            if (j < 2) cout << " | ";
+        }
+        cout << endl;
+        if (i < 2) cout << "--|---|--" << endl;
+    }
+}
+
+bool checkWin(char grid[3][3], char player) {
+    // Check rows and columns
+    for (int i = 0; i < 3; i++) {
+        if ((grid[i][0] == player && grid[i][1] == player && grid[i][2] == player) ||
+            (grid[0][i] == player && grid[1][i] == player && grid[2][i] == player)) {
+            return true;
+        }
+    }
+    // Check diagonals
+    if ((grid[0][0] == player && grid[1][1] == player && grid[2][2] == player) ||
+        (grid[0][2] == player && grid[1][1] == player && grid[2][0] == player)) {
+        return true;
+    }
+    return false;
+}
+
+bool checkDraw(char grid[3][3]) {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (grid[i][j] == ' ') {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+void playerMove(char grid[3][3], char player) {
+    int row, col;
+    while (true) {
+        cout << "Player " << player << ", enter your move (row and column): ";
+        cin >> row >> col;
+        if (row >= 1 && row <= 3 && col >= 1 && col <= 3 && grid[row-1][col-1] == ' ') {
+            grid[row-1][col-1] = player;
+            break;
+        } else {
+            cout << "Invalid move, try again." << endl;
+        }
+    }
+}
+
+bool playAgain() {
+    char choice;
+    cout << "Do you want to play again? (y/n): ";
+    cin >> choice;
+    return (choice == 'y' || choice == 'Y');
+}
+
+int main() {
+    char grid[3][3];
+    char currentPlayer = 'X';
+    bool gameWon = false;
+
+    do {
+        initializeGrid(grid);
+        gameWon = false;
+        currentPlayer = 'X';
+
+        while (true) {
+            displayGrid(grid);
+            playerMove(grid, currentPlayer);
+
+            if (checkWin(grid, currentPlayer)) {
+                displayGrid(grid);
+                cout << "Player " << currentPlayer << " wins!" << endl;
+                gameWon = true;
+                break;
+            } else if (checkDraw(grid)) {
+                displayGrid(grid);
+                cout << "It's a draw!" << endl;
+                break;
+            }
+
+            // Switch player
+            currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+        }
+
+    } while (playAgain());
+
+    cout << "Thank you for playing!" << endl;
+    return 0;
+}
